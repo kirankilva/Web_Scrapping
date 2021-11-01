@@ -9,18 +9,22 @@ sheet = file.active
 sheet.title = "Top Rated Movies"
 sheet.append(["Rank", "Movie Name", "Year of Release", "IMDB Rating"])
 
-# Accessing the website
-url = "https://www.imdb.com/chart/top/"
-site = requests.get(url)
-soup = BeautifulSoup(site.text, "html5lib")
+try:
+    # Accessing the website
+    url = "https://www.imdb.com/chart/top/"
+    site = requests.get(url)
+    site.raise_for_status()
+    soup = BeautifulSoup(site.text, "html5lib")
 
-for movie in soup.find('tbody', class_="lister-list").find_all('tr'):
-    rank = int(movie.find('td', class_="titleColumn").get_text(strip=True).split(".")[0])
-    name = movie.find('td', class_="titleColumn").a.text
-    year = int(movie.find('td', class_="titleColumn").span.text.strip("()"))
-    rating = float(movie.find('td', class_="ratingColumn imdbRating").strong.text)
+    for movie in soup.find('tbody', class_="lister-list").find_all('tr'):
+        rank = int(movie.find('td', class_="titleColumn").get_text(strip=True).split(".")[0])
+        name = movie.find('td', class_="titleColumn").a.text
+        year = int(movie.find('td', class_="titleColumn").span.text.strip("()"))
+        rating = float(movie.find('td', class_="ratingColumn imdbRating").strong.text)
 
-    sheet.append([rank, name, year, rating]) 
+        sheet.append([rank, name, year, rating]) 
+except:
+    print("Invalid url")
 
 # Saving the excel file
 file.save("IMDB Ratings data.xlsx")   
