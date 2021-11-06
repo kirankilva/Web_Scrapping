@@ -11,10 +11,10 @@ from tkinter import messagebox as msg
 import openpyxl
 
 # Creating a workbook
-# book = openpyxl.Workbook()
-# sheet = book.active
-# sheet.title = "Top rated movies"
-# sheet.append(["Rank", "Movie Name", "Year of Release", "IMDB Ratings"])
+book = openpyxl.Workbook()
+sheet = book.active
+sheet.title = "Top rated movies"
+sheet.append(["Rank", "Movie Name", "Year of Release", "IMDB Ratings"])
 
 # initialising the chrome webdriver and automating the websites
 driver = webdriver.Chrome("D:/Softwares/chromedriver.exe")
@@ -42,9 +42,10 @@ try:
         year = movieInfo.find_element(By.CLASS_NAME, "secondaryInfo").text.strip("()")
         ratings = movie.find_element(By.TAG_NAME, "strong").text
 
-        # sheet.append([int(rank), name, int(year), float(ratings)]) 
+        sheet.append([int(rank), name, int(year), float(ratings)]) 
+        
     # Saving the excel file 
-    # book.save("Top rated movies data.xlsx")
+    book.save("Top rated movies data.xlsx")
     
 finally:
     driver.quit()
